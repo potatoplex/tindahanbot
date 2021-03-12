@@ -27,7 +27,7 @@ export default class EightBallCommand extends Command {
 
 	async run(message: CommandoMessage): AsyncCommandRunType {
 		const items = (await this.client.provider.get(
-			message.guild,
+			'750285896267333674',
 			'cmd-8ball-answers'
 		)) as string[];
 		const answer = pick(items).toUpperCase();

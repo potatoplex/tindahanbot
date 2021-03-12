@@ -24,7 +24,7 @@ export default class PanindaCommand extends Command {
 
 	async run(message: CommandoMessage): AsyncCommandRunType {
 		const items = (await this.client.provider.get(
-			message.guild,
+			'750285896267333674',
 			'cmd-paninda-items'
 		)) as string[];
 		const paninda = pick(items).toUpperCase();
