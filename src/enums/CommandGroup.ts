@@ -1,4 +1,4 @@
-type CommandGroupKeys = 'GENERAL' | 'FUN' | 'UTILITY' | 'GAME';
+type CommandGroupKeys = 'GENERAL' | 'FUN' | 'MOD' | 'GAME';
 
 type CommandGroupType = {
 	[key in CommandGroupKeys]: {
@@ -16,9 +16,9 @@ const CommandGroup: CommandGroupType = {
 		name: 'fun',
 		description: 'Fun Commands',
 	},
-	UTILITY: {
-		name: 'utility',
-		description: 'Utililty Commands',
+	MOD: {
+		name: 'mod',
+		description: 'Moderator Commands',
 	},
 	GAME: {
 		name: 'game',

@@ -1,11 +1,12 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import BaseCommand from '../../common/BaseCommand';
 import CommandGroup from '../../enums/CommandGroup';
 import DiscordApiService from '../../services/DiscordApiService';
 import { AsyncCommandRunType } from '../../typings';
 import { createEmbedMessage } from '../../util/MessageUtil';
 import { getRandomColor, pick } from '../../util/RngUtil';
 
-export default class EightBallCommand extends Command {
+export default class EightBallCommand extends BaseCommand {
 	discordApiService: DiscordApiService;
 	constructor(client: CommandoClient) {
 		super(client, {
