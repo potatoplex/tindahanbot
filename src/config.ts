@@ -12,12 +12,16 @@ const {
 	INACTIVE_BASE_ROLE,
 	INACTIVE_ACTIVITY_ROLES,
 	INVITE_CHANNEL,
+	DB_URL,
+	DB_NAME,
 } = process.env;
 
 export default {
 	commandPrefix: BOT_PREFIX,
 	owner: OWNER_ID,
 	token: BOT_TOKEN,
+	dbUrl: DB_URL || '',
+	dbName: DB_NAME || '',
 	activity: {
 		name: BOT_ACTIVITY_NAME,
 		type: BOT_ACTIVITY_TYPE,
