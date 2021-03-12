@@ -1,5 +1,8 @@
 import { CommandoClient } from 'discord.js-commando';
 import path from 'path';
+import { MongoClient } from 'mongodb';
+import { MongoDBProvider } from 'commando-provider-mongo';
+
 import { ConfigType } from './typings';
 
 import config from './config';
@@ -21,6 +24,16 @@ client.registry
 	.registerDefaultGroups()
 	.registerDefaultCommands({ unknownCommand: false })
 	.registerCommandsIn(path.join(__dirname, 'commands'));
+
+client
+	.setProvider(
+		MongoClient.connect(config.dbUrl || '', {
+			useUnifiedTopology: true,
+		}).then(
+			(client: MongoClient) => new MongoDBProvider(client, config.dbName)
+		)
+	)
+	.catch(console.error);
 
 client.once('ready', () => {
 	const {
