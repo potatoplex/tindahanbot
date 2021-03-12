@@ -13,7 +13,7 @@ export default class InactiveTrackerCommand extends Command {
 			name: 'inactive',
 			memberName: 'inactive',
 			aliases: ['inac'],
-			group: CommandGroup.UTILITY.name,
+			group: CommandGroup.MOD.name,
 			description: 'List Inactive Members',
 			throttling: {
 				usages: 2,

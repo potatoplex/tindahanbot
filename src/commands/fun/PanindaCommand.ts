@@ -23,6 +23,7 @@ export default class PanindaCommand extends Command {
 	}
 
 	async run(message: CommandoMessage): AsyncCommandRunType {
+		await this.client.provider.init(this.client);
 		const items = (await this.client.provider.get(
 			'750285896267333674',
 			'cmd-paninda-items'

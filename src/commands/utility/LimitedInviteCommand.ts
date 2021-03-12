@@ -12,7 +12,7 @@ export default class LimitedInviteCommand extends Command {
 			name: 'invite',
 			memberName: 'invite',
 			aliases: ['inv'],
-			group: CommandGroup.UTILITY.name,
+			group: CommandGroup.MOD.name,
 			description: 'Invite a user',
 			throttling: {
 				usages: 2,
