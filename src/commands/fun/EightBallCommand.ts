@@ -27,6 +27,7 @@ export default class EightBallCommand extends BaseCommand {
 	}
 
 	async run(message: CommandoMessage): AsyncCommandRunType {
+		await this.client.provider.init(this.client);
 		const items = (await this.client.provider.get(
 			'750285896267333674',
 			'cmd-8ball-answers'
