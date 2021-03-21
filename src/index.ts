@@ -7,6 +7,7 @@ import { ConfigType } from './typings';
 
 import config from './config';
 import CommandGroup from './enums/CommandGroup';
+import mongoose from 'mongoose';
 
 const client = new CommandoClient({
 	...config,
@@ -25,17 +26,25 @@ client.registry
 	.registerDefaultCommands({ unknownCommand: false })
 	.registerCommandsIn(path.join(__dirname, 'commands'));
 
-client
-	.setProvider(
-		MongoClient.connect(config.dbUrl || '', {
-			useUnifiedTopology: true,
-		}).then(
-			(client: MongoClient) => new MongoDBProvider(client, config.dbName)
+async function dbSetup() {
+	await mongoose.connect(`${config.dbUrl}/${config.dbName}`, {
+		useUnifiedTopology: true,
+		useCreateIndex: true,
+	});
+	client
+		.setProvider(
+			MongoClient.connect(config.dbUrl || '', {
+				useUnifiedTopology: true,
+			}).then(
+				(client: MongoClient) =>
+					new MongoDBProvider(client, config.dbName)
+			)
 		)
-	)
-	.catch(console.error);
+		.catch(console.error);
+}
 
-client.once('ready', () => {
+client.once('ready', async () => {
+	await dbSetup();
 	const {
 		activity: { name, type },
 	} = (config as unknown) as ConfigType;
