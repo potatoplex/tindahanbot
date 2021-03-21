@@ -1,6 +1,7 @@
 import { CommandoClient, CommandoMessage } from 'discord.js-commando';
 import BaseCommand from '../../common/BaseCommand';
 import CommandGroup from '../../enums/CommandGroup';
+import Eightball from '../../models/Eightball';
 import DiscordApiService from '../../services/DiscordApiService';
 import { AsyncCommandRunType } from '../../typings';
 import { createEmbedMessage } from '../../util/MessageUtil';
@@ -27,12 +28,8 @@ export default class EightBallCommand extends BaseCommand {
 	}
 
 	async run(message: CommandoMessage): AsyncCommandRunType {
-		await this.client.provider.init(this.client);
-		const items = (await this.client.provider.get(
-			'750285896267333674',
-			'cmd-8ball-answers'
-		)) as string[];
-		const answer = pick(items).toUpperCase();
+		const answers = await Eightball.find({});
+		const answer = pick(answers.map(({ name }) => name)).toUpperCase();
 		const embed = createEmbedMessage(getRandomColor()).setDescription(
 			`🔮 ${answer}`
 		);

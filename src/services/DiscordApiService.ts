@@ -23,7 +23,7 @@ export type Member = {
 export default class DiscordApiService extends BaseService {
 	async getMembersByGuildId(
 		guildId: string,
-		limit: number = 1000
+		limit = 1000
 	): Promise<Member[]> {
 		try {
 			const result = await this.httpClient.get(
