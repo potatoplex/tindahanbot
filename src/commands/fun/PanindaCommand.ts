@@ -16,8 +16,8 @@ export default class PanindaCommand extends Command {
 			group: CommandGroup.FUN.name,
 			description: 'Bumili ng paninda sa Tindahan ni Aling Nena',
 			throttling: {
-				usages: 2,
-				duration: 5,
+				usages: 1,
+				duration: 10,
 			},
 		});
 		this.discordApiService = new DiscordApiService();
