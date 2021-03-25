@@ -25,7 +25,7 @@ export default class PanindaCommand extends Command {
 
 	async run(message: CommandoMessage): AsyncCommandRunType {
 		const panindas = await Paninda.find({});
-		const paninda = pick(panindas.map(({ name }) => name)).toUpperCase();
+		const paninda = pick(panindas.map(({ name }) => name));
 		const embed = createEmbedMessage(getRandomColor()).setDescription(
 			paninda
 		);
