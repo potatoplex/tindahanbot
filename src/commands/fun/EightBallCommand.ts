@@ -29,7 +29,7 @@ export default class EightBallCommand extends BaseCommand {
 
 	async run(message: CommandoMessage): AsyncCommandRunType {
 		const answers = await Eightball.find({});
-		const answer = pick(answers.map(({ name }) => name)).toUpperCase();
+		const answer = pick(answers.map(({ name }) => name));
 		const embed = createEmbedMessage(getRandomColor()).setDescription(
 			`🔮 ${answer}`
 		);

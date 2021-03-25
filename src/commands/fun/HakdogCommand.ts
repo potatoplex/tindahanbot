@@ -4,8 +4,8 @@ import BaseCommand from '../../common/BaseCommand';
 import CommandGroup from '../../enums/CommandGroup';
 import HotdogWeapon from '../../helper/weapon/HotdogWeapon';
 import { AsyncCommandRunType, SingleUserArgType } from '../../typings';
-import { bold, createEmbedMessage, underline } from '../../util/MessageUtil';
-import { doRoll, getRandomColor } from '../../util/RngUtil';
+import { bold, underline } from '../../util/MessageUtil';
+import { doRoll } from '../../util/RngUtil';
 
 export default class HakdogCommand extends BaseCommand {
 	constructor(client: CommandoClient) {
