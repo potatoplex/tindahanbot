@@ -70,26 +70,25 @@ export default class PanindaCommand extends Command {
 			},
 			{}
 		);
-		const embed = createEmbedMessage(getRandomColor()).setDescription(
-			paninda.name
-		);
-		const messages = [embed];
 
 		if (
 			purchaseCounter[message.author.id] >= Math.floor(cd / 4) &&
-			rateRoll(30)
+			rateRoll(50)
 		) {
 			const reklamos: PanindaReklamoType[] = await PanindaReklamo.find(
 				{}
 			);
 			const reklamo = pick(reklamos.map((r) => r.name));
-			messages.push(
+			return message.say(
 				createEmbedMessage(getRandomColor()).setDescription(
 					reklamo.replace('{user}', mentionAuthor(message))
 				)
 			);
 		}
+		const embed = createEmbedMessage(getRandomColor()).setDescription(
+			paninda.name
+		);
 
-		return Promise.all(messages.map((m) => message.say(m)));
+		return message.say(embed);
 	}
 }
