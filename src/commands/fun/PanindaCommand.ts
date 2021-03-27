@@ -1,6 +1,9 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import CommandGroup from '../../enums/CommandGroup';
 import Paninda from '../../models/Paninda';
+import PanindaReklamo, {
+	PanindaReklamoType,
+} from '../../models/PanindaReklamo';
 import DiscordApiService from '../../services/DiscordApiService';
 import { AsyncCommandRunType } from '../../typings';
 import { createEmbedMessage, mentionAuthor } from '../../util/MessageUtil';
@@ -14,17 +17,11 @@ type RecentPanindaType = {
 };
 
 const reklamos: (string | ((m: CommandoMessage) => string))[] = [
-	(m) =>
-		`${mentionAuthor(
-			m
-		)}, dami mo nang kinuha ha. Siguraduhin mong babayaran mo yan`,
-	(m) => `${mentionAuthor(m)}, wag kang mang hoard oi!`,
-	(m) => `Hinay hinay lang ${mentionAuthor(m)}! Pabilhin mo naman yung iba`,
-	(m) => `${mentionAuthor(m)}, ang dami mong binili because?`,
-	(m) =>
-		`${mentionAuthor(
-			m
-		)}, tama na yan nalulugi na tindahan ko sayo. Di ka nagbabayad e.`,
+	`{userId}, dami mo nang kinuha ha. Siguraduhin mong babayaran mo yan`,
+	`{userId}, wag kang mang hoard oi!`,
+	`Hinay hinay lang {userId}! Pabilhin mo naman yung iba`,
+	`{userId}, ang dami mong binili because?`,
+	`{userId}, tama na yan nalulugi na tindahan ko sayo. Di ka nagbabayad e.`,
 ];
 
 export default class PanindaCommand extends Command {
@@ -58,9 +55,6 @@ export default class PanindaCommand extends Command {
 			_id: { $nin: this.recent.map(({ _id }) => _id) },
 		});
 		const paninda = pick(panindas);
-		const embed = createEmbedMessage(getRandomColor()).setDescription(
-			paninda.name
-		);
 
 		this.recent.push({
 			_id: paninda._id,
@@ -76,14 +70,22 @@ export default class PanindaCommand extends Command {
 			},
 			{}
 		);
-
+		const embed = createEmbedMessage(getRandomColor()).setDescription(
+			paninda.name
+		);
 		const messages = [embed];
 
-		if (purchaseCounter[message.author.id] >= cd && rateRoll(40)) {
-			const reklamo = pick(reklamos);
+		if (
+			purchaseCounter[message.author.id] >= Math.floor(cd / 4) &&
+			rateRoll(30)
+		) {
+			const reklamos: PanindaReklamoType[] = await PanindaReklamo.find(
+				{}
+			);
+			const reklamo = pick(reklamos.map((r) => r.name));
 			messages.push(
 				createEmbedMessage(getRandomColor()).setDescription(
-					typeof reklamo === 'function' ? reklamo(message) : reklamo
+					reklamo.replace('{user}', mentionAuthor(message))
 				)
 			);
 		}
