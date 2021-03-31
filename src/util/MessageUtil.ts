@@ -65,6 +65,15 @@ export function getEmoji(
 	fallback: string | GuildEmoji = ''
 ): GuildEmoji | string {
 	return (
-		client.emojis.cache.find((emoji) => emoji.name === emojiName) || fallback
+		client.emojis.cache.find((emoji) => emoji.name === emojiName) ||
+		fallback
 	);
+}
+
+export async function delay(ms = 500): Promise<boolean> {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve(true);
+		}, ms);
+	});
 }

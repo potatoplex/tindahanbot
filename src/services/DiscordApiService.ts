@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Guild, Snowflake } from 'discord.js';
 import BaseService from './BaseService';
 
@@ -54,5 +55,18 @@ export default class DiscordApiService extends BaseService {
 		roleId: string
 	): Promise<Member[]> {
 		return await this.getMembersByRoleIds(guildId, [roleId]);
+	}
+
+	async updateChannel(
+		channelId: string,
+		data: { name: string }
+	): Promise<void> {
+		try {
+			return await this.httpClient.patch(`/channels/${channelId}`, data, {
+				headers: { 'Content-Type': 'application/json' },
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	}
 }
