@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { Guild, Snowflake } from 'discord.js';
+import { Snowflake } from 'discord.js';
 import BaseService from './BaseService';
 
 export type Member = {
