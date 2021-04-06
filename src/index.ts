@@ -8,6 +8,8 @@ import { ConfigType } from './typings';
 import config from './config';
 import CommandGroup from './enums/CommandGroup';
 import mongoose from 'mongoose';
+import { Message, PartialMessage } from 'discord.js';
+import MessageService from './services/MessageService';
 
 const client = new CommandoClient({
 	...config,
@@ -50,6 +52,21 @@ client.once('ready', async () => {
 	} = (config as unknown) as ConfigType;
 	console.log(`Logged in as ${client.user?.tag}! (${client.user?.id})`);
 	client.user?.setActivity(name, { type });
+});
+
+client.on('messageDelete', async (message: Message | PartialMessage) => {
+	const { channel, content, author } = message;
+	console.log(content);
+
+	if (channel && content && author) {
+		await MessageService.addDeletedMessage({
+			channel: channel.id,
+			content: content,
+			user: author.id,
+		});
+	}
+
+	await MessageService.cleanUpDeletedMessages(channel.id);
 });
 
 client.on('error', console.error);
