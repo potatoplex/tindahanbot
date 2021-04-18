@@ -20,7 +20,7 @@ export default class SnipeCommand extends BaseCommand {
 			memberName: 'snipe',
 			aliases: ['brrt'],
 			group: CommandGroup.FUN.name,
-			description: 'Ipakita ang hakdog',
+			description: 'Show recently deleted message in channel',
 			args: [
 				{
 					key: 'size',
@@ -46,14 +46,13 @@ export default class SnipeCommand extends BaseCommand {
 			const lastUseDiff =
 				(new Date().getTime() - lastUseTime.getTime()) / 1000;
 			if (lastUseDiff < THROTTLE_DURATION) {
-				return null;
-				// return message.say(
-				// 	`${mentionAuthor(
-				// 		message
-				// 	)}, You may not use the \`snipe\` command again for another ${(
-				// 		THROTTLE_DURATION - lastUseDiff
-				// 	).toFixed(2)} seconds.`
-				// );
+				return message.say(
+					`${mentionAuthor(
+						message
+					)}, You may not use the \`snipe\` command again for another ${(
+						THROTTLE_DURATION - lastUseDiff
+					).toFixed(2)} seconds.`
+				);
 			}
 		}
 
