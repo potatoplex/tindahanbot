@@ -14,7 +14,7 @@ export default class EightBallCommand extends BaseCommand {
 			name: '8ball',
 			memberName: '8ball',
 			hidden: true,
-			patterns: [new RegExp(/^(aling[\s]+)?nena[\s]*[,]?[\s]*/, 'i')],
+			patterns: [new RegExp(/^aling[\s]+nena[\s]*[,][\s]*/, 'i')],
 			group: CommandGroup.FUN.name,
 			description:
 				'Tanungin si Aling Nena ng mga bagay-bagay na bumabagabag sayo',

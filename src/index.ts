@@ -56,7 +56,6 @@ client.once('ready', async () => {
 
 client.on('messageDelete', async (message: Message | PartialMessage) => {
 	const { channel, content, author } = message;
-	console.log(content);
 
 	if (channel && content && author) {
 		await MessageService.addDeletedMessage({

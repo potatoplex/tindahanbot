@@ -16,17 +16,8 @@ type RecentPanindaType = {
 	userId: string;
 };
 
-const reklamos: (string | ((m: CommandoMessage) => string))[] = [
-	`{userId}, dami mo nang kinuha ha. Siguraduhin mong babayaran mo yan`,
-	`{userId}, wag kang mang hoard oi!`,
-	`Hinay hinay lang {userId}! Pabilhin mo naman yung iba`,
-	`{userId}, ang dami mong binili because?`,
-	`{userId}, tama na yan nalulugi na tindahan ko sayo. Di ka nagbabayad e.`,
-];
-
 export default class PanindaCommand extends Command {
 	recent: RecentPanindaType[];
-	discordApiService: DiscordApiService;
 	constructor(client: CommandoClient) {
 		super(client, {
 			name: 'paninda',
@@ -39,7 +30,6 @@ export default class PanindaCommand extends Command {
 				duration: 10,
 			},
 		});
-		this.discordApiService = new DiscordApiService();
 		this.recent = [];
 	}
 

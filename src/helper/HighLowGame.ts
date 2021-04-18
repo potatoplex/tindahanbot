@@ -35,7 +35,7 @@ type CardRank = {
 	numericValue: number;
 };
 
-type Card = {
+export type Card = {
 	suit: CardSuit;
 	rank: CardRank;
 	code: string;
