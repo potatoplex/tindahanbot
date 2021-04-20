@@ -65,13 +65,13 @@ export default class SnipeCommand extends BaseCommand {
 		if (messages.length) {
 			const endTime = new Date();
 			const spiels = messages
-				.filter(({ createdAt }) => {
+				.filter(({ createdAt, content }) => {
 					const startTime = new Date(createdAt);
 
 					const timeDiff =
 						(endTime.getTime() - startTime.getTime()) / 1000;
 					const seconds = Math.round(timeDiff);
-					return seconds <= expiration;
+					return content && seconds <= expiration;
 				})
 				.map(({ user: authorID, content, createdAt }) => {
 					const member = message.guild.member(

@@ -4,7 +4,6 @@ import Paninda from '../../models/Paninda';
 import PanindaReklamo, {
 	PanindaReklamoType,
 } from '../../models/PanindaReklamo';
-import DiscordApiService from '../../services/DiscordApiService';
 import { AsyncCommandRunType } from '../../typings';
 import { createEmbedMessage, mentionAuthor } from '../../util/MessageUtil';
 import { getRandomColor, pick, rateRoll } from '../../util/RngUtil';
@@ -22,7 +21,6 @@ export default class PanindaCommand extends Command {
 		super(client, {
 			name: 'paninda',
 			memberName: 'paninda',
-			aliases: ['pabili'],
 			group: CommandGroup.FUN.name,
 			description: 'Bumili ng paninda sa Tindahan ni Aling Nena',
 			throttling: {

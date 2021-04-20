@@ -34,5 +34,15 @@ interface SingleUserArgType {
 	target: User;
 }
 
+/* ---- Potchi ArgTypes ---- */
+interface PotchiArgType {
+	quantity: number;
+}
+
+/* ---- Pabili ArgTypes ---- */
+interface PabiliArgType {
+	paninda: string;
+}
+
 type AsyncCommandRunType = Promise<Message | Message[] | null>;
 type CommandRunType = AsyncCommandRunType | null;
