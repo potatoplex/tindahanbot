@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, User } from 'discord.js';
 import EmojiGame from '../../helper/emoji/EmojiGame';
 
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { CommandoClient, CommandoMessage } from 'discord.js-commando';
 import CommandGroup from '../../enums/CommandGroup';
 import { AsyncCommandRunType } from '../../typings';
 import { bold, createEmbedMessage, mentionUser } from '../../util/MessageUtil';
@@ -12,8 +12,7 @@ import { shuffle } from '../../util/RngUtil';
 
 type EmojiGameArgType = { rounds: number };
 
-const participantWaitDuration = 3000;
-// const participantWaitDuration = 10000;
+const participantWaitDuration = 10000;
 const nextQuestionDelay = 5000;
 const questionDuration = 15000;
 
