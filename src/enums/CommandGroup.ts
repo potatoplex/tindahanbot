@@ -1,11 +1,9 @@
-type CommandGroupKeys = 'GENERAL' | 'FUN' | 'MOD' | 'GAME';
+type CommandGroupKeys = 'GENERAL' | 'FUN' | 'MOD' | 'GAME' | 'IMAGE';
 
-type CommandGroupType = {
-	[key in CommandGroupKeys]: {
-		name: string;
-		description: string;
-	};
-};
+type CommandGroupType = Record<
+	CommandGroupKeys,
+	{ name: string; description: string }
+>;
 
 const CommandGroup: CommandGroupType = {
 	GENERAL: {
@@ -15,6 +13,10 @@ const CommandGroup: CommandGroupType = {
 	FUN: {
 		name: 'fun',
 		description: 'Fun Commands',
+	},
+	IMAGE: {
+		name: 'image',
+		description: 'Image Manipulation Commands',
 	},
 	MOD: {
 		name: 'mod',

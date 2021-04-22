@@ -9,7 +9,7 @@ import IceCreamPaninda from '../../helper/paninda/IceCreamPaninda';
 import KapePaninda from '../../helper/paninda/KapePaninda';
 import CommandGroup from '../../enums/CommandGroup';
 import { rateRoll } from '../../util/RngUtil';
-import { CommandRunType, PabiliArgType } from '../../typings';
+import { AsyncCommandRunType, PabiliArgType } from '../../typings';
 import BaseCommand from '../../common/BaseCommand';
 
 const items = [
@@ -43,7 +43,10 @@ export default class PabiliCommand extends BaseCommand {
 		});
 	}
 
-	run(message: CommandoMessage, { paninda }: PabiliArgType): CommandRunType {
+	async run(
+		message: CommandoMessage,
+		{ paninda }: PabiliArgType
+	): AsyncCommandRunType {
 		let spiel: string | MessageEmbed = new MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle('Paninda')
@@ -59,7 +62,9 @@ export default class PabiliCommand extends BaseCommand {
 					inline: true,
 				}))
 			)
-			.setFooter(`Type ${this.client.commandPrefix}pabili <item> to buy`);
+			.setFooter(
+				`Type ${message.guild.commandPrefix}pabili <item> to buy`
+			);
 
 		if (paninda) {
 			const removeSpaces = (str = '') =>
@@ -78,6 +83,11 @@ export default class PabiliCommand extends BaseCommand {
 				spiel = success ? successSpiel(message) : failSpiel(message);
 			}
 		}
-		return message.channel.send(spiel);
+		await message.guild.fetch();
+		return message.channel.send(
+			(spiel as MessageEmbed).setFooter(
+				`Type ${message.guild.commandPrefix}pabili <item> to buy`
+			)
+		);
 	}
 }

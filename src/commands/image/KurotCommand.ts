@@ -1,23 +1,19 @@
-import { TextChannel, User } from 'discord.js';
+import { TextChannel } from 'discord.js';
 import { CommandoClient, CommandoMessage } from 'discord.js-commando';
 import BaseCommand from '../../common/BaseCommand';
 import CommandGroup from '../../enums/CommandGroup';
 import BoyKurotTemplate from '../../helper/kurot/BoyKurotTemplate';
 import GirlKurotTemplate from '../../helper/kurot/GirlKurotTemplate';
 import NsfwKurotTemplate from '../../helper/kurot/NsfwKurotTemplate';
-import { AsyncCommandRunType } from '../../typings';
+import { AsyncCommandRunType, SingleUserArgType } from '../../typings';
 import { pick } from '../../util/RngUtil';
-
-type ArgType = {
-	target: User;
-};
 
 export default class KurotCommand extends BaseCommand {
 	constructor(client: CommandoClient) {
 		super(client, {
 			name: 'kurot',
 			memberName: 'kurot',
-			group: CommandGroup.FUN.name,
+			group: CommandGroup.IMAGE.name,
 			description: 'Kurutin ang kapotchi',
 			aliases: ['pinch', 'pisil'],
 			args: [
@@ -32,7 +28,7 @@ export default class KurotCommand extends BaseCommand {
 
 	async run(
 		message: CommandoMessage,
-		{ target }: ArgType
+		{ target }: SingleUserArgType
 	): AsyncCommandRunType {
 		const isNsfw =
 			message.channel.type === 'dm' ||
