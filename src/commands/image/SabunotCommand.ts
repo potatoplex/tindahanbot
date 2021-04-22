@@ -34,7 +34,7 @@ export default class SabunotCommand extends BaseCommand {
 			name: 'sabunot',
 			memberName: 'sabunot',
 			aliases: ['sb'],
-			group: CommandGroup.FUN.name,
+			group: CommandGroup.IMAGE.name,
 			description: 'Make sabunot someone',
 			args: [
 				{

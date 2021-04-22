@@ -1,26 +1,18 @@
-import { createCanvas, loadImage } from 'canvas';
-import { Message, MessageAttachment } from 'discord.js';
+import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import CommandGroup from '../../enums/CommandGroup';
+import ImageBuilder, {
+	Dimensions,
+	Coordinates,
+	ImageEntry,
+} from '../../helper/image/ImageBuilder';
+import UserImageEntry from '../../helper/image/UserImageEntry';
 import { AsyncCommandRunType, SingleUserArgType } from '../../typings';
 import { pick } from '../../util/RngUtil';
 
 const BAKUNA_IMG = `https://media.discordapp.net/attachments/820193847618961438/833318396410069032/vaccine.png`;
 const WIDTH = 1000;
 const HEIGHT = 800;
-
-const AVATAR_W = HEIGHT;
-const AVATAR_H = HEIGHT;
-
-type Coordinates = {
-	x: number;
-	y: number;
-};
-
-type Dimensions = {
-	width: number;
-	height: number;
-};
 
 type Bakuna = {
 	[key: string]: {
@@ -31,8 +23,8 @@ type Bakuna = {
 };
 
 const logoCoords: Coordinates = {
-	x: AVATAR_W * 0.8,
-	y: HEIGHT * 0.05,
+	x: 0.65,
+	y: 0.05,
 };
 
 const bakunas: Bakuna = {
@@ -40,8 +32,8 @@ const bakunas: Bakuna = {
 		url:
 			'https://media.discordapp.net/attachments/820193847618961438/833318426595688458/pfizer.png',
 		dimensions: {
-			width: WIDTH * 0.1,
-			height: HEIGHT * 0.1,
+			width: 0.1 * WIDTH,
+			height: 0.1 * HEIGHT,
 		},
 		coordinates: logoCoords,
 	},
@@ -62,7 +54,7 @@ const bakunas: Bakuna = {
 			width: WIDTH * 0.13,
 			height: HEIGHT * 0.1,
 		},
-		coordinates: { ...logoCoords, x: AVATAR_W * 0.77 },
+		coordinates: logoCoords,
 	},
 	shell: {
 		url:
@@ -89,7 +81,7 @@ const bakunas: Bakuna = {
 			width: WIDTH * 0.13,
 			height: HEIGHT * 0.1,
 		},
-		coordinates: { ...logoCoords, x: AVATAR_W * 0.76 },
+		coordinates: { ...logoCoords, x: 0.63 },
 	},
 	starbucks: {
 		url:
@@ -162,7 +154,7 @@ export default class BakunaCommand extends Command {
 			name: 'bakuna',
 			memberName: 'bakuna',
 			aliases: ['bk', 'patusok', 'tosoken', 'tusok', 'tosok'],
-			group: CommandGroup.FUN.name,
+			group: CommandGroup.IMAGE.name,
 			description: 'Pabakunahan ang pfp',
 			args: [
 				{
@@ -186,36 +178,39 @@ export default class BakunaCommand extends Command {
 		message: CommandoMessage,
 		{ target, bakuna: bakunaKey }: SingleUserArgType & { bakuna: string }
 	): AsyncCommandRunType {
-		const canvas = createCanvas(WIDTH, HEIGHT);
-		const ctx = canvas.getContext('2d');
-		const background = await loadImage(BAKUNA_IMG);
-		const targetAvatar = await loadImage(
-			target.displayAvatarURL({ format: 'png', size: 1024 })
-		);
-
-		const pickedBakuna = bakunas[bakunaKey];
+		const pickedBakuna = bakunas[bakunaKey.toLowerCase()];
 		const {
 			dimensions: bakunaDims,
 			coordinates: bakunaCoords,
 			url: bakunaUrl,
 		} = pickedBakuna;
-		const bakuna = await loadImage(bakunaUrl);
 
-		ctx.drawImage(targetAvatar, 0, 0, AVATAR_W, AVATAR_H);
-		ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-		ctx.drawImage(
-			bakuna,
-			bakunaCoords.x,
-			bakunaCoords.y,
-			bakunaDims.width,
-			bakunaDims.height
+		const brandImg = new ImageEntry(
+			bakunaUrl,
+			bakunaDims,
+			bakunaCoords,
+			false
+		);
+		const targetImg = new UserImageEntry(
+			target,
+			HEIGHT,
+			{ x: 0, y: 0 },
+			false,
+			1024
+		);
+		const bakunaImg = new ImageEntry(
+			BAKUNA_IMG,
+			{ width: WIDTH, height: HEIGHT },
+			{ x: 0, y: 0 }
 		);
 
-		const attachment = new MessageAttachment(
-			canvas.toBuffer(),
-			'bakuna.png'
-		);
+		const builder = new ImageBuilder({ width: WIDTH, height: HEIGHT }, [
+			targetImg,
+			bakunaImg,
+			brandImg,
+		]);
 
+		const attachment = await builder.render();
 		return await message.channel.send(attachment);
 	}
 }

@@ -2,7 +2,7 @@ import { MessageReaction } from 'discord.js';
 import { CommandoClient, CommandoMessage } from 'discord.js-commando';
 import BaseCommand from '../../common/BaseCommand';
 import CommandGroup from '../../enums/CommandGroup';
-import HighLowGame, { resolveCard } from '../../helper/HighLowGame';
+import HighLowGame, { Card, resolveCard } from '../../helper/HighLowGame';
 import { AsyncCommandRunType } from '../../typings';
 import {
 	bold,
@@ -11,110 +11,6 @@ import {
 } from '../../util/MessageUtil';
 import { getRandomColor } from '../../util/RngUtil';
 import CardImages from '../../data/cards/minimal.json';
-
-type CardColor = 'BLACK' | 'RED';
-type CardSuitName = 'HEARTS' | 'DIAMONDS' | 'SPADES' | 'CLUBS';
-
-type CardSuit = {
-	color: CardColor;
-	name: CardSuitName;
-	icon: string;
-	code: string;
-	rank: number;
-};
-
-type CardRankCode =
-	| 'ACE'
-	| 'TWO'
-	| 'THREE'
-	| 'FOUR'
-	| 'FIVE'
-	| 'SIX'
-	| 'SEVEN'
-	| 'EIGHT'
-	| 'NINE'
-	| 'TEN'
-	| 'JACK'
-	| 'QUEEN'
-	| 'KING';
-
-type CardRank = {
-	name: CardRankCode;
-	code: string;
-	numericValue: number;
-};
-
-type Card = {
-	suit: CardSuit;
-	rank: CardRank;
-	code: string;
-	image?: string;
-};
-
-const CARD_SUIT_MAP: {
-	[key in CardSuitName]: CardSuit;
-} = {
-	DIAMONDS: {
-		name: 'DIAMONDS',
-		code: 'D',
-		icon: ':diamond:',
-		color: 'RED',
-		rank: 4,
-	},
-	HEARTS: {
-		name: 'HEARTS',
-		code: 'H',
-		icon: ':heart:',
-		color: 'RED',
-		rank: 3,
-	},
-
-	SPADES: {
-		name: 'SPADES',
-		code: 'S',
-		icon: ':spade:',
-		color: 'BLACK',
-		rank: 2,
-	},
-	CLUBS: {
-		name: 'CLUBS',
-		code: 'C',
-		icon: ':club:',
-		color: 'BLACK',
-		rank: 1,
-	},
-};
-
-const CARD_RANK_CODE_MAP: Record<
-	CardRankCode,
-	Pick<CardRank, 'code' | 'numericValue'>
-> = {
-	ACE: { code: 'A', numericValue: 1 },
-	TWO: { code: '2', numericValue: 2 },
-	THREE: { code: '3', numericValue: 3 },
-	FOUR: { code: '4', numericValue: 4 },
-	FIVE: { code: '5', numericValue: 5 },
-	SIX: { code: '6', numericValue: 6 },
-	SEVEN: { code: '7', numericValue: 7 },
-	EIGHT: { code: '8', numericValue: 8 },
-	NINE: { code: '9', numericValue: 9 },
-	TEN: { code: '10', numericValue: 10 },
-	JACK: { code: 'J', numericValue: 11 },
-	QUEEN: { code: 'Q', numericValue: 12 },
-	KING: { code: 'K', numericValue: 13 },
-};
-
-type CardRankMapType = Record<CardRankCode, CardRank>;
-const CARD_RANK_MAP: CardRankMapType = (Object.keys(CARD_RANK_CODE_MAP).reduce(
-	(prev, next) => ({
-		...prev,
-		[next as CardRankCode]: {
-			name: next as CardRankCode,
-			...CARD_RANK_CODE_MAP[next as CardRankCode],
-		},
-	}),
-	{}
-) as unknown) as CardRankMapType;
 
 const HIGHER = '⬆️';
 const LOWER = '⬇️';
