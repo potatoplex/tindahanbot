@@ -47,6 +47,7 @@ export default class PabiliCommand extends BaseCommand {
 		message: CommandoMessage,
 		{ paninda }: PabiliArgType
 	): AsyncCommandRunType {
+		await message.guild.fetch();
 		let spiel: string | MessageEmbed = new MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle('Paninda')
@@ -55,17 +56,16 @@ export default class PabiliCommand extends BaseCommand {
 			.setThumbnail(
 				'https://cdn.discordapp.com/icons/749742356466761922/73a5e5150238a0af17992739d9346641.webp'
 			)
+			.setFooter(
+				`Type ${message.guild.commandPrefix}pabili <item> to buy`
+			)
 			.addFields(
 				...items.map(({ name, price }) => ({
 					name,
 					value: `₱${price.toFixed(2)}`,
 					inline: true,
 				}))
-			)
-			.setFooter(
-				`Type ${message.guild.commandPrefix}pabili <item> to buy`
 			);
-
 		if (paninda) {
 			const removeSpaces = (str = '') =>
 				str.replace(/\s+/g, '').toLowerCase();
@@ -83,11 +83,7 @@ export default class PabiliCommand extends BaseCommand {
 				spiel = success ? successSpiel(message) : failSpiel(message);
 			}
 		}
-		await message.guild.fetch();
-		return message.channel.send(
-			(spiel as MessageEmbed).setFooter(
-				`Type ${message.guild.commandPrefix}pabili <item> to buy`
-			)
-		);
+
+		return message.channel.send(spiel);
 	}
 }
