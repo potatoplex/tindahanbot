@@ -49,8 +49,8 @@ export default class TopicCommand extends Command {
 			userId: message.author.id,
 		});
 
-		const embed = createEmbedMessage(getRandomColor()).setTitle(
-			`${topic.name}`
+		const embed = createEmbedMessage(getRandomColor()).setDescription(
+			topic.name
 		);
 
 		return message.say(embed);

@@ -179,7 +179,6 @@ export default class EmojiGameCommand extends BaseCommand {
 			if (!isDone) {
 				const c = content.trim().toLowerCase();
 				const match = c === answer.toLowerCase();
-				console.log('alias', alias);
 				const aliasMatch =
 					alias && alias.map((a) => a.toLowerCase()).includes(c);
 
