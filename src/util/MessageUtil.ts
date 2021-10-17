@@ -1,12 +1,12 @@
 import {
 	Client,
+	ColorResolvable,
 	GuildEmoji,
 	Message,
 	MessageEmbed,
 	Snowflake,
 	User,
 } from 'discord.js';
-import { CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 export function bold(str: string): string {
 	return `**${str}**`;
@@ -32,7 +32,7 @@ export function code(str: string): string {
 	return '`' + str + '`';
 }
 
-export function mentionAuthor({ author }: CommandoMessage | Message): string {
+export function mentionAuthor({ author }: Message): string {
 	return mentionUser(author);
 }
 
@@ -42,7 +42,7 @@ export function mentionUser(user: User | Snowflake | string): string {
 }
 
 export function createEmbedMessage(
-	color = '#0099ff',
+	color: ColorResolvable = '#0099ff',
 	title?: string
 ): MessageEmbed {
 	return new MessageEmbed({ color, title });
@@ -60,13 +60,12 @@ export function repeatMessage<T>(
 }
 
 export function getEmoji(
-	client: CommandoClient | Client,
+	client: Client,
 	emojiName: string,
 	fallback: string | GuildEmoji = ''
 ): GuildEmoji | string {
 	return (
-		client.emojis.cache.find((emoji) => emoji.name === emojiName) ||
-		fallback
+		client.emojis.cache.find((emoji) => emoji.name === emojiName) || fallback
 	);
 }
 
