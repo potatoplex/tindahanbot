@@ -1,73 +1,41 @@
-import { CommandoClient } from 'discord.js-commando';
-import path from 'path';
-import { MongoClient } from 'mongodb';
-import { MongoDBProvider } from 'commando-provider-mongo';
+import { Intents } from "discord.js";
+import WOKCommands from "wokcommands";
+import path from "path";
+import config from "./config";
+import Client from "./helper/Client";
+import mongoose from "mongoose";
 
-import { ConfigType } from './typings';
-
-import config from './config';
-import CommandGroup from './enums/CommandGroup';
-import mongoose from 'mongoose';
-import { Message, PartialMessage } from 'discord.js';
-import MessageService from './services/MessageService';
-
-const client = new CommandoClient({
-	...config,
-	partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER', 'USER'],
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  partials: ["MESSAGE", "CHANNEL", "REACTION", "GUILD_MEMBER", "USER"],
 });
 
-client.registry
-	.registerDefaultTypes()
-	.registerGroups(
-		Object.values(CommandGroup).map(({ name, description }) => [
-			name,
-			description,
-		])
-	)
-	.registerDefaultGroups()
-	.registerDefaultCommands({ unknownCommand: false })
-	.registerCommandsIn(path.join(__dirname, 'commands'));
+client.on("ready", async () => {
+  await mongoose.connect(`${config.dbUrl}/${config.dbName}`, {
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useNewUrlParser: true,
+  });
 
-async function dbSetup() {
-	await mongoose.connect(`${config.dbUrl}/${config.dbName}`, {
-		useUnifiedTopology: true,
-		useCreateIndex: true,
-	});
-	client
-		.setProvider(
-			MongoClient.connect(config.dbUrl || '', {
-				useUnifiedTopology: true,
-			}).then(
-				(client: MongoClient) =>
-					new MongoDBProvider(client, config.dbName)
-			)
-		)
-		.catch(console.error);
-}
+  const dbOptions = {
+    keepAlive: true,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  };
 
-client.once('ready', async () => {
-	await dbSetup();
-	const {
-		activity: { name, type },
-	} = (config as unknown) as ConfigType;
-	console.log(`Logged in as ${client.user?.tag}! (${client.user?.id})`);
-	client.user?.setActivity(name, { type });
+  new WOKCommands(client, {
+    commandDir: path.join(__dirname, "commands"),
+    featureDir: path.join(__dirname, "features"),
+    typeScript: process.env.NODE_ENV !== "production",
+    dbOptions,
+    testServers: config.testServers,
+    mongoUri: `${config.dbUrl}/${config.dbName}`,
+    disabledDefaultCommands: ["help"],
+    ignoreBots: true,
+    botOwners: config.owners,
+  }).setDefaultPrefix(config.commandPrefix);
+
+  console.log("The bot is ready");
 });
-
-client.on('messageDelete', async (message: Message | PartialMessage) => {
-	const { channel, content, author } = message;
-
-	if (channel && content && author) {
-		await MessageService.addDeletedMessage({
-			channel: channel.id,
-			content: content,
-			user: author.id,
-		});
-	}
-
-	await MessageService.cleanUpDeletedMessages(channel.id);
-});
-
-client.on('error', console.error);
 
 client.login(config.token);
