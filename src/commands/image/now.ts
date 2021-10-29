@@ -1,8 +1,9 @@
-import { createCanvas, loadImage } from "canvas";
+import { createCanvas } from "canvas";
 import { MessageAttachment } from "discord.js";
 import { createEmbedMessage } from "../../util/MessageUtil";
 import CommandGroup from "../../enums/CommandGroup";
 import CommandBuilder from "../../helper/CommandBuilder";
+import { getImage } from "../../util/CacheUtil";
 
 type Dimensions = {
   width: number;
@@ -130,7 +131,7 @@ export default CommandBuilder.build({
     },
   ],
   slash: true,
-  callback: async ({ args, guild, interaction, message, channel }) => {
+  callback: async ({ args, guild, interaction, message }) => {
     const [img, firstTargetId, secondTargetId] = args;
 
     const findMember = (id: string) =>
@@ -147,11 +148,11 @@ export default CommandBuilder.build({
 
     const canvas = createCanvas(image.width, image.height);
     const ctx = canvas.getContext("2d");
-    const background = await loadImage(image.url);
-    const firstTargetAvatar = await loadImage(
+    const background = await getImage(image.url);
+    const firstTargetAvatar = await getImage(
       firstTarget.displayAvatarURL({ format: "png", size: 128 })
     );
-    const secondTargetAvatar = await loadImage(
+    const secondTargetAvatar = await getImage(
       secondTarget.displayAvatarURL({ format: "png", size: 128 })
     );
 

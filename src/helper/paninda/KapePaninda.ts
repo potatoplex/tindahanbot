@@ -66,6 +66,7 @@ export default class KapePaninda extends Paninda {
     const spiels = [
       `${bold(`DECAF COFFEE`)} kasi ${bold(`DECAF`)}inili`,
       `${bold(`MATAPANG NA KAPE`)} pero di parin siya kayang ipaglaban`,
+      `WALANG KAPE! Nakaleave yung barista ngayon`,
     ];
 
     return `Bumili si ${mentionUser(user)} ng ${pick(spiels)}.`;

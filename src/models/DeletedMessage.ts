@@ -9,6 +9,9 @@ const schema = new Schema(
     content: {
       type: String,
     },
+    attachment: {
+      type: String,
+    },
     user: {
       type: String,
     },

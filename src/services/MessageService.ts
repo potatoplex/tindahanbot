@@ -1,11 +1,14 @@
+import { BufferResolvable } from "discord.js";
+import { Stream } from "stream";
 import DeletedMessage from "../models/DeletedMessage";
 import BaseService from "./BaseService";
 
 export type DeletedMessageType = {
-  content: string;
+  content?: string;
   user: string;
   channel: string;
   createdAt: string;
+  attachment?: string;
 };
 
 class MessageService extends BaseService {

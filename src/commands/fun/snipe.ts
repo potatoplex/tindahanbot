@@ -2,8 +2,11 @@ import CommandGroup from "../../enums/CommandGroup";
 import CommandBuilder from "../../helper/CommandBuilder";
 import MessageService from "../../services/MessageService";
 import { createEmbedMessage } from "../../util/MessageUtil";
+import { pick } from "../../util/RngUtil";
 
 const MAX_HISTORY = 5;
+const NENA_SNIPE_URL =
+  "https://media.discordapp.net/attachments/765047137473265714/902536477622300692/899747808691761252.png";
 
 export default CommandBuilder.build({
   category: CommandGroup.FUN.name,
@@ -22,16 +25,18 @@ export default CommandBuilder.build({
     if (messages.length > 0) {
       const expiration = 180;
 
+      const footer = pick(["Headshot", "Huli Ka", "HEHE"]);
+
       const endTime = new Date();
       const spiels = messages
-        .filter(({ createdAt, content }) => {
+        .filter(({ createdAt, content, attachment }) => {
           const startTime = new Date(createdAt);
 
           const timeDiff = (endTime.getTime() - startTime.getTime()) / 1000;
           const seconds = Math.round(timeDiff);
-          return content && seconds <= expiration;
+          return (content || attachment) && seconds <= expiration;
         })
-        .map(({ user: authorID, content, createdAt }) => {
+        .map(({ user: authorID, content, createdAt, attachment }) => {
           const member = guild?.members.cache.find(
             ({ user }) => user.id === authorID
           );
@@ -39,10 +44,19 @@ export default CommandBuilder.build({
           const { displayName: nickname, user } = member;
           const { username } = user;
           const avatar = user.displayAvatarURL({ format: "png" });
-          return createEmbedMessage("#0099ff")
+          const embed = createEmbedMessage("#D32F2F")
             .setAuthor(nickname || username, avatar)
-            .setDescription(content)
-            .setTimestamp(+createdAt);
+            .setTimestamp(+createdAt)
+            .setFooter(footer, NENA_SNIPE_URL);
+
+          if (content) {
+            embed.setDescription(content);
+          }
+
+          if (attachment) {
+            embed.setImage(attachment);
+          }
+          return embed;
         })
         .filter((v) => !!v);
 
