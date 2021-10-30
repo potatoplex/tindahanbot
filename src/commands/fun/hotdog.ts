@@ -40,13 +40,13 @@ export default CommandBuilder.build({
 
     if (message) {
       await message.reply(line1);
-      return channel.send(line2);
+      channel.send(line2);
+      return;
     }
 
     if (interaction) {
       await interaction.reply(line1);
       channel.send(line2);
-      return null;
     }
   },
 });
