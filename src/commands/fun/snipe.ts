@@ -2,7 +2,6 @@ import CommandGroup from "../../enums/CommandGroup";
 import CommandBuilder from "../../helper/CommandBuilder";
 import MessageService from "../../services/MessageService";
 import { createEmbedMessage } from "../../util/MessageUtil";
-import { pick } from "../../util/RngUtil";
 
 const MAX_HISTORY = 5;
 const NENA_SNIPE_URL =
@@ -25,8 +24,6 @@ export default CommandBuilder.build({
     if (messages.length > 0) {
       const expiration = 180;
 
-      const footer = pick(["Headshot", "Huli Ka", "HEHE"]);
-
       const endTime = new Date();
       const spiels = messages
         .filter(({ createdAt, content, attachment }) => {
@@ -46,8 +43,7 @@ export default CommandBuilder.build({
           const avatar = user.displayAvatarURL({ format: "png" });
           const embed = createEmbedMessage("#D32F2F")
             .setAuthor(nickname || username, avatar)
-            .setTimestamp(+createdAt)
-            .setFooter(footer, NENA_SNIPE_URL);
+            .setTimestamp(+createdAt);
 
           if (content) {
             embed.setDescription(content);

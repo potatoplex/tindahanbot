@@ -42,7 +42,7 @@ export default abstract class BaseKape implements IKape {
     return this._context;
   }
   getContentHeight(): number {
-    return 0.85;
+    return 0.75;
   }
 
   private _name: string;

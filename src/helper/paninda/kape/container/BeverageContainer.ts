@@ -72,8 +72,6 @@ export default abstract class BeverageContainer {
     } = this;
 
     const { x: px, y: py } = padding;
-    // const px = 0;
-    // const py = 0;
 
     const x1 = origin.x + margin.x + px;
     const y1 = origin.y + margin.y + py;

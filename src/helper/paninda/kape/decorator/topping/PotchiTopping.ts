@@ -1,4 +1,4 @@
-import { rotateImg } from "../../../../../util/CanvasUtil";
+import { rotateDrawing } from "../../../../../util/CanvasUtil";
 import randomAngle, { doRoll, doRollRange } from "../../../../../util/RngUtil";
 import IKape from "../../IKape";
 import ToppingDecorator from "./ToppingDecorator";
@@ -43,7 +43,7 @@ export default class PotchiTopping extends ToppingDecorator {
 
         ctx.save();
 
-        const p = rotateImg(potchi, randomAngle());
+        const p = rotateDrawing(potchi, randomAngle());
 
         ctx.drawImage(p, x, y, toppingWidth, toppingHeight);
 
@@ -55,7 +55,7 @@ export default class PotchiTopping extends ToppingDecorator {
       .forEach(() => {
         const y = y1;
         ctx.save();
-        const p = rotateImg(potchi, randomAngle());
+        const p = rotateDrawing(potchi, randomAngle());
 
         const jitter = {
           x: doRoll(Math.floor(toppingWidth * 0.3)),

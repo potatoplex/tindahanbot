@@ -1,4 +1,4 @@
-import { rotateImg } from "../../../../../util/CanvasUtil";
+import { rotateDrawing } from "../../../../../util/CanvasUtil";
 import randomAngle, { doRoll, doRollRange } from "../../../../../util/RngUtil";
 import IKape from "../../IKape";
 import ToppingDecorator from "./ToppingDecorator";
@@ -46,7 +46,7 @@ export default class SiomaiTopping extends ToppingDecorator {
 
         ctx.save();
 
-        const p = rotateImg(siomai, randomAngle());
+        const p = rotateDrawing(siomai, randomAngle());
 
         ctx.drawImage(p, x, y, toppingWidth, toppingHeight);
 
@@ -58,7 +58,7 @@ export default class SiomaiTopping extends ToppingDecorator {
       .forEach(() => {
         const y = y1;
         ctx.save();
-        const p = rotateImg(siomai, randomAngle());
+        const p = rotateDrawing(siomai, randomAngle());
 
         const jitter = {
           x: doRoll(Math.floor(toppingWidth * 0.3)),

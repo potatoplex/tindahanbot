@@ -1,4 +1,9 @@
-import { User } from "discord.js";
+import {
+  GuildMember,
+  InteractionReplyOptions,
+  MessageEmbed,
+  User,
+} from "discord.js";
 import { bold, mentionUser } from "../../util/MessageUtil";
 
 export default abstract class Paninda {
@@ -18,7 +23,10 @@ export default abstract class Paninda {
     this.succeRate = successRate;
   }
 
-  abstract successSpiel: (_user: User) => string;
+  abstract successSpiel: (
+    _user: User,
+    _member: GuildMember
+  ) => Promise<string | MessageEmbed | InteractionReplyOptions> | string;
 
   failSpiel = (user: User): string => {
     return `Hindi nakabili si ${mentionUser(user)} ${bold(

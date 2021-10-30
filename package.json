@@ -26,6 +26,7 @@
     "discord-api-types": "^0.23.1",
     "discord.js": "^13.2.0",
     "dotenv": "^8.2.0",
+    "get-image-colors": "^4.0.0",
     "mongodb": "^3.6.4",
     "mongoose": "^5.13.11",
     "node-cache": "^5.1.2",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@types/color": "^3.0.2",
+    "@types/get-image-colors": "^4.0.1",
     "@types/mongodb": "^3.6.9",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^14.14.31",
