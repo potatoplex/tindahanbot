@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { InteractionReplyOptions, MessageEmbed } from "discord.js";
 import CommandGroup from "../../enums/CommandGroup";
 import CommandBuilder from "../../helper/CommandBuilder";
 import CantonPaninda from "../../helper/paninda/CantonPaninda";
@@ -26,24 +26,17 @@ export default CommandBuilder.build({
   slash: "both",
   expectedArgs: "<paninda>",
   expectedArgsTypes: ["STRING"],
-  callback: async ({ user, guild, instance, args }) => {
+  callback: async ({
+    user,
+    member,
+    guild,
+    message,
+    interaction,
+    instance,
+    args,
+  }) => {
     let hasMatch = false;
-    let spiel: string | MessageEmbed = new MessageEmbed()
-      .setColor("#0099ff")
-      .setTitle("Paninda")
-      .setAuthor("Aling Nena")
-      .setDescription("Mga Paninda sa Tindahan ni Aling Nena")
-      .setThumbnail(
-        "https://cdn.discordapp.com/icons/749742356466761922/73a5e5150238a0af17992739d9346641.webp"
-      )
-      .setFooter(`Type ${instance.getPrefix(guild?.id)}pabili <item> to buy`)
-      .addFields(
-        ...items.map(({ name, price }) => ({
-          name,
-          value: `₱${price.toFixed(2)}`,
-          inline: true,
-        }))
-      );
+    let spiel: string | MessageEmbed | InteractionReplyOptions = "";
     const [paninda] = args;
 
     if (paninda) {
@@ -53,17 +46,58 @@ export default CommandBuilder.build({
       );
 
       if (match) {
+        if (interaction) {
+          await interaction.deferReply();
+        }
         hasMatch = true;
         const { succeRate, successSpiel, failSpiel } = match;
 
         const success = rateRoll(succeRate);
 
-        spiel = success ? successSpiel(user) : failSpiel(user);
+        spiel = success ? await successSpiel(user, member) : failSpiel(user);
       }
     }
 
-    return hasMatch
-      ? createEmbedMessage("RANDOM").setDescription(spiel as string)
-      : spiel;
+    if (!hasMatch) {
+      spiel = new MessageEmbed()
+        .setColor("#0099ff")
+        .setTitle("Paninda")
+        .setAuthor("Aling Nena")
+        .setDescription("Mga Paninda sa Tindahan ni Aling Nena")
+        .setThumbnail(
+          "https://cdn.discordapp.com/icons/749742356466761922/73a5e5150238a0af17992739d9346641.webp"
+        )
+        .setFooter(`Type ${instance.getPrefix(guild?.id)}pabili <item> to buy`)
+        .addFields(
+          ...items.map(({ name, price }) => ({
+            name,
+            value: `₱${price.toFixed(2)}`,
+            inline: true,
+          }))
+        );
+
+      return spiel;
+    }
+    if (typeof spiel === "string") {
+      const embed = createEmbedMessage("RANDOM").setDescription(
+        spiel as string
+      );
+      if (message) {
+        return embed;
+      }
+
+      await interaction?.followUp({ embeds: [embed] });
+    } else {
+      const interactionReply = spiel as InteractionReplyOptions;
+      if (message) {
+        await message.reply(interactionReply);
+      } else {
+        if (!interaction.deferred) {
+          interaction.reply(interactionReply);
+        } else {
+          interaction.followUp(interactionReply);
+        }
+      }
+    }
   },
 });

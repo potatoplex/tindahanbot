@@ -1,5 +1,6 @@
-import { loadImage, CanvasRenderingContext2D } from "canvas";
+import { CanvasRenderingContext2D } from "canvas";
 import { AllowedImageSize, User } from "discord.js";
+import { getImage } from "../../util/CacheUtil";
 import { ImageEntry, Dimensions, Coordinates } from "./ImageBuilder";
 
 export default class UserImageEntry extends ImageEntry {
@@ -30,7 +31,7 @@ export default class UserImageEntry extends ImageEntry {
     if (this.round) {
       this.roundCorners(ctx, { x, y }, this.dimensions);
     }
-    const image = await loadImage(this.image);
+    const image = await getImage(this.image);
     ctx.drawImage(image, x, y, width, height);
   }
 }

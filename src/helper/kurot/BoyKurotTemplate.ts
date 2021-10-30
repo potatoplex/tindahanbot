@@ -1,4 +1,4 @@
-import { Message, MessageAttachment, User } from "discord.js";
+import { MessageAttachment, User } from "discord.js";
 import UserImageEntry from "../image/UserImageEntry";
 import ImageBuilder from "../image/ImageBuilder";
 import BaseKurotTemplate from "./BaseKurotTemplate";

@@ -32,7 +32,7 @@ export default CommandBuilder.build({
     );
 
     const count = await Topic.countDocuments();
-    const cd = Math.floor(count * 0.4);
+    const cd = Math.floor(count * 0.5);
 
     const topics = await Topic.find({
       _id: { $nin: client.getRecents(RECENT_KEY).map(({ _id }) => _id) },
