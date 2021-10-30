@@ -20,7 +20,7 @@ export default CommandBuilder.build({
     },
   ],
   slash: true,
-  callback: async ({ user, args, guild, interaction, message, channel }) => {
+  callback: async ({ user, args, guild, interaction, channel }) => {
     const targetId = args[0];
 
     const target = guild?.members.cache.find(

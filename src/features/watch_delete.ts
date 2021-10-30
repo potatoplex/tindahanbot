@@ -1,18 +1,30 @@
 import Client from "../helper/Client";
-import MessageService from "../services/MessageService";
+import MessageService, { DeletedMessageType } from "../services/MessageService";
 
 export default (client: Client): void => {
-  client.on("messageDelete", async ({ channel, content, author }) => {
-    if (channel && content && author) {
-      await MessageService.addDeletedMessage({
-        channel: channel.id,
-        content: content,
-        user: author.id,
-      });
-    }
+  client.on(
+    "messageDelete",
+    async ({ channel, content, author, attachments }) => {
+      console.log(JSON.stringify(attachments.first() || ""));
 
-    await MessageService.cleanUpDeletedMessages(channel.id);
-  });
+      if (channel && (content || attachments.first()) && author) {
+        const body: Omit<DeletedMessageType, "createdAt"> = {
+          channel: channel.id,
+          user: author.id,
+        };
+
+        if (content) {
+          body.content = content;
+        }
+        if (attachments.first()) {
+          body.attachment = attachments.first()?.proxyURL;
+        }
+        await MessageService.addDeletedMessage(body);
+      }
+
+      await MessageService.cleanUpDeletedMessages(channel.id);
+    }
+  );
 };
 
 const config = {

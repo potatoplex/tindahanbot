@@ -1,7 +1,8 @@
-import { createCanvas, loadImage } from "canvas";
+import { createCanvas } from "canvas";
 import { MessageAttachment } from "discord.js";
 import CommandGroup from "../../enums/CommandGroup";
 import CommandBuilder from "../../helper/CommandBuilder";
+import { getImage } from "../../util/CacheUtil";
 
 const SABUNOT_IMG = `https://media.discordapp.net/attachments/820193847618961438/833318254599471134/Screen-Shot-2018-06-06-at-2.png`;
 
@@ -36,7 +37,7 @@ export default CommandBuilder.build({
     },
   ],
   slash: true,
-  callback: async ({ user, args, guild, interaction, message, channel }) => {
+  callback: async ({ user, args, guild, interaction, message }) => {
     const targetId = args[0];
 
     const target = guild?.members.cache.find(
@@ -47,11 +48,11 @@ export default CommandBuilder.build({
 
     const canvas = createCanvas(WIDTH, HEIGHT);
     const ctx = canvas.getContext("2d");
-    const background = await loadImage(SABUNOT_IMG);
-    const sabunoterAvatar = await loadImage(
+    const background = await getImage(SABUNOT_IMG);
+    const sabunoterAvatar = await getImage(
       user.displayAvatarURL({ format: "png" })
     );
-    const sabunoteeAvatar = await loadImage(
+    const sabunoteeAvatar = await getImage(
       target.displayAvatarURL({ format: "png" })
     );
 
