@@ -28,6 +28,7 @@ import Sisig from "./kape/decorator/topping/Sisig";
 import Paninda from "./Paninda";
 import getImageColors from "get-image-colors";
 import IKape from "./kape/IKape";
+import Pasas from "./kape/decorator/topping/Pasas";
 
 export default class KapePaninda extends Paninda {
   sauceRate = 70;
@@ -62,7 +63,13 @@ export default class KapePaninda extends Paninda {
     }
 
     if (rateRoll(this.toppingsRate)) {
-      const Topping = pick([PotchiTopping, SiomaiTopping, Sisig, DolomiteSand]);
+      const Topping = pick([
+        PotchiTopping,
+        SiomaiTopping,
+        Sisig,
+        DolomiteSand,
+        Pasas,
+      ]);
       out = new Topping(out);
     }
 
