@@ -1,11 +1,5 @@
-import { createCanvas } from "canvas";
 import Color from "color";
-import {
-  fillCircle,
-  fillRect,
-  rotateDrawing,
-  strokeCircle,
-} from "../../../../../util/CanvasUtil";
+import { fillCircle, fillRect } from "../../../../../util/CanvasUtil";
 import randomAngle, {
   doRoll,
   doRollRange,
@@ -18,62 +12,6 @@ export default class Pasas extends ToppingDecorator {
   constructor(kape: IKape) {
     super(kape, "Pasas");
   }
-
-  // render = async (): Promise<void> => {
-  //   await this.kape.render();
-
-  //   const {
-  //     bounds: {
-  //       coordinates: [[bx1], _, [__, by3]],
-  //       dimensions,
-  //     },
-  //   } = this.kape.getContainer();
-  //   const filled = this.kape.getContentHeight() * dimensions.height;
-  //   const toppingHeight = this.getToppingHeight();
-  //   const toppingWidth = this.getContainer().bounds.dimensions.width;
-  //   const baseColor = "#612302";
-
-  //   const x1 = bx1;
-  //   const y1 = by3 - filled - toppingHeight;
-  //   const ctx = this.kape.getContext();
-
-  //   const segments = doRollRange(5, 7);
-  //   const segmentsWidth = Math.floor(toppingWidth / segments);
-  //   const excess = toppingWidth - segmentsWidth * segments;
-  //   const padding = excess / (segments - 2);
-
-  //   const w = toppingWidth * 0.06;
-  //   const h = w * 1.3;
-  //   Array(2)
-  //     .fill(null)
-  //     .forEach((_, i) =>
-  //       Array(segments)
-  //         .fill(null)
-  //         .forEach((__, j) => {
-  //           const baseX = x1 + segmentsWidth * j + padding * i;
-  //           const x = Math.max(
-  //             baseX,
-  //             doRollRange(baseX, baseX + segmentsWidth)
-  //           );
-  //           const heightPadding = toppingHeight * 1.1;
-  //           const y = doRollRange(y1 + heightPadding, y1 + toppingHeight - h);
-
-  //           ctx.save();
-  //           ctx.fillStyle = baseColor;
-  //           ctx.beginPath();
-  //           ctx.ellipse(x, y, w, h, randomAngle(), 0, 2 * Math.PI);
-  //           ctx.fill();
-  //           ctx.strokeStyle = Color(baseColor).darken(0.6).hex();
-  //           ctx.stroke();
-
-  //           // ctx.fillRect(x, y, w, h);
-
-  //           ctx.restore();
-  //           // fillCircle(ctx, x, y, w, h, baseColor);
-  //           // strokeCircle(ctx, x, y, w, h, Color(baseColor).darken(0.8).hex());
-  //         })
-  //     );
-  // };
 
   getToppingHeight = (): number =>
     this.getContainer().trimmedDimensions.width * 0.08;
