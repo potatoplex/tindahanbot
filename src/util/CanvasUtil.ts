@@ -41,7 +41,7 @@ export function strokeRect(
   ctx.restore();
 }
 
-export function fillCircle(
+export function drawCircle(
   ctx: NodeCanvasRenderingContext2D,
   x1: number,
   y1: number,
@@ -61,14 +61,44 @@ export function fillCircle(
   );
   ctx.closePath();
   ctx.clip();
+  ctx.restore();
+}
+export function fillCircle(
+  ctx: NodeCanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  width: number,
+  height: number,
+  color: string
+): void {
+  drawCircle(ctx, x1, y1, width, height, color);
+  ctx.save();
   ctx.fillStyle = color;
-  ctx.fillRect(x1, y1, width, height);
+  ctx.fill();
+  ctx.restore();
+}
+export function strokeCircle(
+  ctx: NodeCanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  width: number,
+  height: number,
+  color: string
+): void {
+  drawCircle(ctx, x1, y1, width, height, color);
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.stroke();
   ctx.restore();
 }
 
-export function rotateDrawing(img: Image | Canvas, angle: number): Canvas {
-  const padding = angle ? 1.2 : 0;
-  const canvas = createCanvas(img.width * padding, img.height * padding);
+export function rotateDrawing(
+  img: Image | Canvas,
+  angle: number,
+  padding = 1.2
+): Canvas {
+  const p = angle ? padding : 0;
+  const canvas = createCanvas(img.width * p, img.height * padding);
   const ctx = canvas.getContext("2d");
   ctx.save();
   const origin = {

@@ -4,8 +4,6 @@ import MessageService from "../../services/MessageService";
 import { createEmbedMessage } from "../../util/MessageUtil";
 
 const MAX_HISTORY = 5;
-const NENA_SNIPE_URL =
-  "https://media.discordapp.net/attachments/765047137473265714/902536477622300692/899747808691761252.png";
 
 export default CommandBuilder.build({
   category: CommandGroup.FUN.name,
